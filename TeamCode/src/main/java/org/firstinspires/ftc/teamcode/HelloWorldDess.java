@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp()
-public class GamepadOpMode extends OpMode {
+public class HelloWorldDess extends OpMode {
     @Override
     public void init() {
     }
