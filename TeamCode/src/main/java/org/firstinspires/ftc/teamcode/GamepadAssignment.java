@@ -4,22 +4,25 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 @TeleOp()
 public class GamepadAssignment extends OpMode {
+    private DcMotor motor1;
+    double speedForward = -gamepad1.left_stick_y / 2.0;
+    double sideSpeed = -gamepad1.right_stick_y / 2.0;
+    boolean aButton;
+    boolean bButton;
+    boolean xButton;
+    boolean yButton;
+
     @Override
     public void init() {
+        motor1 = hardwareMap.get(DcMotor.class, "testMotor1");
     }
 
     @Override
-    public void loop() {0
-
-        //speed variables
-        double speedForward = -gamepad1.left_stick_y / 2.0;
-        double sideSpeed = -gamepad1.right_stick_y / 2.0;
-        boolean aButton;
-        boolean bButton;
-        boolean xButton;
-        boolean yButton;
+    public void loop() {
 
         //left stick controls and variables
         telemetry.addData("Left stick x", gamepad1.left_stick_x);
@@ -60,6 +63,11 @@ public class GamepadAssignment extends OpMode {
         if (gamepad1.a) {
             speedForward = gamepad1.left_stick_x;
             sideSpeed = gamepad1.left_stick_y;
+        }
+        //motor control code, runs motor 1 when pressing B
+        if (gamepad1.b) {
+            motor1.setPower(1);
+
         }
     }
 }
