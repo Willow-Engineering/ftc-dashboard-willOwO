@@ -17,7 +17,7 @@ import java.lang.reflect.Modifier;
 @Autonomous
 public class GamepadTestOpMode extends LinearOpMode {
 
-    private static void logGamepad(Telemetry telemetry, Gamepad gamepad, String prefix) {
+    public static void logGamepad(Telemetry telemetry, Gamepad gamepad, String prefix) {
         telemetry.addData(prefix + "Synthetic",
                 gamepad.getGamepadId() == Gamepad.ID_UNASSOCIATED);
         for (Field field : gamepad.getClass().getFields()) {
