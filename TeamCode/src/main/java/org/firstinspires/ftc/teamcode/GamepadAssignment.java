@@ -67,7 +67,6 @@ public class GamepadAssignment extends OpMode {
         //motor control code, runs motor 1 when pressing B
         if (gamepad1.b) {
             motor1.setPower(1);
-
         }
     }
 }
