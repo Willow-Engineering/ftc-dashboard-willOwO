@@ -1,16 +1,29 @@
 
 
-package org.firstinspires.fc.teamcode;
+package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 
 
 @TeleOp()
-public class GamepadAignment extends OpMode {
+public class gamepad_codeSM extends OpMode {
     @Override
+    private DcMotor motor1;
+
     public void init() {
+    }
+testMotor1 = hardwareMap.get(DcMotor.class, "testMotor1");
+    testMotor2 = hardwareMap.get(DcMotor.class, "testMotor2");
+
+
+    if(gamepad1.b) {
+        testMotor1.setPower(1);
     }
 
 
