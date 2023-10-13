@@ -58,6 +58,8 @@ public class Basic_bot_SM extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor arm = null;
+
 
     @Override
     public void runOpMode() {
@@ -69,6 +71,8 @@ public class Basic_bot_SM extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        arm = hardwareMap.get(DcMotor.class, "arm_motor");
+
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -96,7 +100,27 @@ public class Basic_bot_SM extends LinearOpMode {
             double turn  =  gamepad1.right_stick_x;
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+//            if(gamepad1.dpad_up){
+//                arm.setTargetPosition(130);
+//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                arm.setPower(0.5);
+//            }
+//            else if (gamepad1.dpad_down){
+//                arm.setTargetPosition(1);
+//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                arm.setPower(0.5);
+//            }
 
+
+                if(gamepad1.dpad_up){
+                    arm.setPower(0.8);
+                }
+                else if (gamepad1.dpad_down){
+                    arm.setPower(-0.8);
+                }
+                else {
+                    arm.setPower(0);
+                }
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
