@@ -102,18 +102,29 @@ public class Basic_bot_DH extends LinearOpMode {
             double turn  =  gamepad1.right_stick_x;
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+
+            //base touch sensor code, turns motor off if sensor is triggered
+//            if (touch.getState()){
+//                //Touch Sensor is not pressed
+//                arm.setPower(0.2);
+//
+//            } else {
+//                //Touch Sensor is pressed
+//                arm.setPower(0);
+
 //            if(gamepad1.dpad_up){
-//                arm.setTargetPosition(130);
+//                arm.setTargetPosition(83);
 //                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                arm.setPower(0.5);
 //            }
 //            else if (gamepad1.dpad_down){
-//                arm.setTargetPosition(1);
+//                arm.setTargetPosition(0);
 //                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                arm.setPower(0.5);
 //            }
 
 
+// Up and down on Dpad arm control (basic controls) [DISABLED]
             if(gamepad1.dpad_up){
                 arm.setPower(0.8);
             }
@@ -121,9 +132,11 @@ public class Basic_bot_DH extends LinearOpMode {
                 arm.setPower(-0.8);
             }
             else {
-                arm.setPower(0);
+                arm.setPower(0.05);
             }
-            // Tank Mode uses one stick to control each wheel.
+            telemetry.addData("Arm Test", arm.getCurrentPosition());
+            telemetry.update();
+            // Tank Mode uses one stick to control each wheel. [DISABLED]
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
