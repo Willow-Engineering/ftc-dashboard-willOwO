@@ -35,6 +35,7 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.hardware.DcMotorEx;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
@@ -60,7 +61,7 @@ public class Basic_bot_DH extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private DcMotor arm = null;
+    private DcMotorEx arm = null;
 
 
     @Override
@@ -73,7 +74,7 @@ public class Basic_bot_DH extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-        arm = hardwareMap.get(DcMotor.class, "arm_motor");
+        arm = hardwareMap.get(DcMotorEx.class, "arm_motor");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -85,13 +86,14 @@ public class Basic_bot_DH extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
+        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
+//            int newPlace = arm.getCurrentPosition()+10;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -125,17 +127,38 @@ public class Basic_bot_DH extends LinearOpMode {
 
 
 // Up and down on Dpad arm control (basic controls) [DISABLED]
-            if(gamepad1.dpad_up){
-                arm.setPower(0.8);
+//            if(gamepad1.dpad_up){
+//                arm.setPower(0.8);
+//            }
+//            else if (gamepad1.dpad_down){
+//                arm.setPower(-0.8);
+//            }
+//            else {
+//                arm.setPower(0.05);
+//            }
+
+            //Set position arm code
+            if(gamepad1.a){
+                arm.setTargetPosition(950);
+
+                // Switch to RUN_TO_POSITION mode
+                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+                // Start the motor moving by setting the max velocity to 200 ticks per second
+                arm.setVelocity(1500);
             }
-            else if (gamepad1.dpad_down){
-                arm.setPower(-0.8);
+            else if (gamepad1.b){
+                arm.setTargetPosition(0);
+                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                arm.setVelocity(1500);
             }
-            else {
-                arm.setPower(0.05);
+            else if (gamepad1.x){
+                arm.setTargetPosition(650);
+                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                arm.setVelocity(1500);
             }
-            telemetry.addData("Arm Test", arm.getCurrentPosition());
-            telemetry.update();
+//            telemetry.addData("Arm Test", arm.getCurrentPosition());
+//            telemetry.update();
             // Tank Mode uses one stick to control each wheel. [DISABLED]
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
@@ -148,6 +171,7 @@ public class Basic_bot_DH extends LinearOpMode {
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Encoder value", arm.getCurrentPosition());
             telemetry.update();
         }
     }
