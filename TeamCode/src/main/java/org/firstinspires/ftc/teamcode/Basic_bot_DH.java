@@ -32,12 +32,16 @@
 package org.firstinspires.ftc.teamcode;
 
         import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+        import com.acmerobotics.dashboard.FtcDashboard;
+        import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorEx;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
+
+        import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ServoPulseWidthParameters;
 
 
 /**
@@ -64,6 +68,7 @@ public class Basic_bot_DH extends LinearOpMode {
     private DcMotorEx arm = null;
 
 
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -72,9 +77,12 @@ public class Basic_bot_DH extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         arm = hardwareMap.get(DcMotorEx.class, "arm_motor");
+
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -93,7 +101,6 @@ public class Basic_bot_DH extends LinearOpMode {
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
-//            int newPlace = arm.getCurrentPosition()+10;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -101,9 +108,9 @@ public class Basic_bot_DH extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+            double turn = gamepad1.right_stick_x;
+            leftPower = Range.clip(drive + turn, -1.0, 1.0);
+            rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
             //base touch sensor code, turns motor off if sensor is triggered
 //            if (touch.getState()){
@@ -138,41 +145,48 @@ public class Basic_bot_DH extends LinearOpMode {
 //            }
 
             //Set position arm code
-            if(gamepad1.a){
-                arm.setTargetPosition(950);
+            if (gamepad1.dpad_up) {
+                arm.setTargetPosition(arm.getCurrentPosition() + 80);
 
                 // Switch to RUN_TO_POSITION mode
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
                 // Start the motor moving by setting the max velocity to 200 ticks per second
                 arm.setVelocity(1500);
-            }
-            else if (gamepad1.b){
+            } else if (gamepad1.b) {
                 arm.setTargetPosition(0);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
-            }
-            else if (gamepad1.x){
-                arm.setTargetPosition(650);
+            } else if (gamepad1.dpad_down) {
+                arm.setTargetPosition(arm.getCurrentPosition() - 80);
+
+                // Switch to RUN_TO_POSITION mode
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+                // Start the motor moving by setting the max velocity to 200 ticks per second
                 arm.setVelocity(1500);
-            }
+                if (gamepad1.x) {
+                    arm.setTargetPosition(650);
+                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    arm.setVelocity(1500);
+                }
 //            telemetry.addData("Arm Test", arm.getCurrentPosition());
 //            telemetry.update();
-            // Tank Mode uses one stick to control each wheel. [DISABLED]
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+                // Tank Mode uses one stick to control each wheel. [DISABLED]
+                // - This requires no math, but it is hard to drive forward slowly and keep straight.
+                // leftPower  = -gamepad1.left_stick_y ;
+                // rightPower = -gamepad1.right_stick_y ;
 
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+                // Send calculated power to wheels
+                leftDrive.setPower(leftPower);
+                rightDrive.setPower(rightPower);
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Encoder value", arm.getCurrentPosition());
-            telemetry.update();
+                // Show the elapsed game time and wheel power.
+                telemetry.addData("Status", "Run Time: " + runtime.toString());
+                telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+                telemetry.addData("Encoder value", arm.getCurrentPosition());
+                telemetry.update();
+            }
         }
     }
 }
