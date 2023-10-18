@@ -38,6 +38,7 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorEx;
+        import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
 
@@ -66,6 +67,8 @@ public class Basic_bot_DH extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotorEx arm = null;
+    private Servo claw1 = null;
+    private Servo claw2 = null;
 
 
 
@@ -82,6 +85,8 @@ public class Basic_bot_DH extends LinearOpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         arm = hardwareMap.get(DcMotorEx.class, "arm_motor");
+        claw1 = hardwareMap.get(Servo.class, "claw1");
+        claw2 = hardwareMap.get(Servo.class, "claw2");
 
 
 
@@ -170,6 +175,13 @@ public class Basic_bot_DH extends LinearOpMode {
                     arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                     arm.setVelocity(1500);
                 }
+                arm.setVelocity(1500);
+                if (gamepad1.a) {
+                    arm.setTargetPosition(1750);
+                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                    arm.setVelocity(1500);
+                }
+
 //            telemetry.addData("Arm Test", arm.getCurrentPosition());
 //            telemetry.update();
                 // Tank Mode uses one stick to control each wheel. [DISABLED]
