@@ -59,7 +59,7 @@ package org.firstinspires.ftc.teamcode;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name="Basic_bot_DH", group="Linear Opmode")
 @Config
 //@Disabled
 public class Basic_bot_DH extends LinearOpMode {
@@ -72,10 +72,12 @@ public class Basic_bot_DH extends LinearOpMode {
     private Servo claw1 = null;
     private Servo claw2 = null;
 
-
-    //claw position variables.
-//    public static int left_claw_open = 50;
-//    public static int right_claw_open = 50;
+    //
+//    claw position variables.
+    public static int left_claw_open = 50;
+    public static int right_claw_open = 50;
+    public static int left_claw_shut = 0;
+    public static int right_claw_shut = 0;
 
 
 
@@ -92,9 +94,8 @@ public class Basic_bot_DH extends LinearOpMode {
         leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         arm = hardwareMap.get(DcMotorEx.class, "arm_motor");
-//        claw1 = hardwareMap.get(Servo.class, "claw1");
-//        claw2 = hardwareMap.get(Servo.class, "claw2");
-
+        claw1 = hardwareMap.get(Servo.class, "claw1");
+        claw2 = hardwareMap.get(Servo.class, "claw2");
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -111,7 +112,7 @@ public class Basic_bot_DH extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;   
+            double leftPower;
             double rightPower;
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -160,39 +161,49 @@ public class Basic_bot_DH extends LinearOpMode {
             //Set position arm code
             if (gamepad1.dpad_up) {
                 arm.setTargetPosition(arm.getCurrentPosition() + 80);
-
-                // Switch to RUN_TO_POSITION mode
-                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
-                // Start the motor moving by setting the max velocity to 200 ticks per second
-                arm.setVelocity(1500);
-            } else if (gamepad1.b) {
-                arm.setTargetPosition(0);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
-            } else if (gamepad1.dpad_down) {
+            }
+//            } else if (gamepad1.b) {
+//                arm.setTargetPosition(0);
+//                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//                arm.setVelocity(1500);
+//            }
+            if (gamepad1.dpad_down) {
                 arm.setTargetPosition(arm.getCurrentPosition() - 60);
-
-                // Switch to RUN_TO_POSITION mode
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
-                // Start the motor moving by setting the max velocity to 200 ticks per second
-                arm.setVelocity(2000);
-                if (gamepad1.x) {
-                    arm.setTargetPosition(650);
-                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(1500);
-                }
                 arm.setVelocity(1500);
-                if (gamepad1.a) {
-                    arm.setTargetPosition(1750);
-                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-                    arm.setVelocity(1500);
+            }
+//                // Start the motor moving by setting the max velocity to 200 ticks per second
+//                arm.setVelocity(2000);
+////                if (gamepad1.x) {
+////                    arm.setTargetPosition(650);
+////                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+////                    arm.setVelocity(1500);
+////                }
+//                arm.setVelocity(1500);
+////                if (gamepad1.a) {
+////                    arm.setTargetPosition(1750);
+////                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+////                    arm.setVelocity(1500);
+////                }
+
+                //grabber controls
+                if (gamepad1.y == true) {
+                    claw1.setPosition(left_claw_open);
+
                 }
-//                if (gamepad1.right_trigger > 0) {
-//                    claw1.setPosition(left_claw_open);
-//                    claw2.setPosition(right_claw_open);
-//                }
+                else {
+                    claw1.setPosition(left_claw_shut);
+                }
+                    if (gamepad1.y == true) {
+                        claw2.setPosition(right_claw_open);
+                    }
+                 else {
+                        claw2.setPosition(right_claw_shut);
+                    }
+
+
 
 //            telemetry.addData("Arm Test", arm.getCurrentPosition());
 //            telemetry.update();
@@ -212,4 +223,5 @@ public class Basic_bot_DH extends LinearOpMode {
             }
         }
     }
-}
+
+
