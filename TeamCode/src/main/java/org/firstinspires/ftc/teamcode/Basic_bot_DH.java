@@ -74,9 +74,9 @@ public class Basic_bot_DH extends LinearOpMode {
 
     //
 //    claw position variables.
-    public static int left_claw_open = 50;
+    public static int left_claw_open = 0;
     public static int right_claw_open = 50;
-    public static int left_claw_shut = 0;
+    public static int left_claw_shut = 50;
     public static int right_claw_shut = 0;
 
 
@@ -159,16 +159,21 @@ public class Basic_bot_DH extends LinearOpMode {
 //            }
 
             //Set position arm code
+//            if (gamepad1.b) {
+//                arm.setTargetPosition(0);
+//                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//                arm.setVelocity(1500);
+//            }
+//            if (gamepad1.a) {
+//                arm.setTargetPosition(1900);
+//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                arm.setVelocity(1500);
+//            }
             if (gamepad1.dpad_up) {
                 arm.setTargetPosition(arm.getCurrentPosition() + 80);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
             }
-//            } else if (gamepad1.b) {
-//                arm.setTargetPosition(0);
-//                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-//                arm.setVelocity(1500);
-//            }
             if (gamepad1.dpad_down) {
                 arm.setTargetPosition(arm.getCurrentPosition() - 60);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -189,14 +194,14 @@ public class Basic_bot_DH extends LinearOpMode {
 ////                }
 
                 //grabber controls
-                if (gamepad1.y == true) {
+                if (gamepad1.right_bumper == true) {
                     claw1.setPosition(left_claw_open);
 
                 }
                 else {
                     claw1.setPosition(left_claw_shut);
                 }
-                    if (gamepad1.y == true) {
+                    if (gamepad1.right_bumper == true) {
                         claw2.setPosition(right_claw_open);
                     }
                  else {
