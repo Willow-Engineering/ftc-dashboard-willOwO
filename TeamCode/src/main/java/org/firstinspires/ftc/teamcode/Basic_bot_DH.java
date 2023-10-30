@@ -42,6 +42,7 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.hardware.Servo;
         import com.qualcomm.robotcore.util.ElapsedTime;
         import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.robotcore.hardware.TouchSensor;
 
         import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ServoPulseWidthParameters;
 
@@ -71,6 +72,8 @@ public class Basic_bot_DH extends LinearOpMode {
     private DcMotorEx arm = null;
     private Servo claw1 = null;
     private Servo claw2 = null;
+   private TouchSensor limit;
+
 
     //
 //    claw position variables.
@@ -96,6 +99,8 @@ public class Basic_bot_DH extends LinearOpMode {
         arm = hardwareMap.get(DcMotorEx.class, "arm_motor");
         claw1 = hardwareMap.get(Servo.class, "claw1");
         claw2 = hardwareMap.get(Servo.class, "claw2");
+        limit = hardwareMap.get(TouchSensor.class, "Limit");
+
 
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -110,7 +115,6 @@ public class Basic_bot_DH extends LinearOpMode {
         arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
@@ -145,6 +149,10 @@ public class Basic_bot_DH extends LinearOpMode {
 //                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //                arm.setPower(0.5);
 //            }
+            if (limit.isPressed()) {
+                arm.setPower(0);
+            }
+
 
 
 // Up and down on Dpad arm control (basic controls) [DISABLED]
@@ -224,6 +232,7 @@ public class Basic_bot_DH extends LinearOpMode {
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
                 telemetry.addData("Encoder value", arm.getCurrentPosition());
+                telemetry.addData("Pressed", limit.isPressed());
                 telemetry.update();
             }
         }
