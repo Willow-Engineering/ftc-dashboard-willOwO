@@ -126,8 +126,14 @@ public class Basic_bot_DH extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
-            leftPower = Range.clip(drive + turn, -1.0, 1.0);
-            rightPower = Range.clip(drive - turn, -1.0, 1.0);
+            if(gamepad1.a == true) {
+                leftPower = Range.clip(drive + turn, -1.5, 1.5);
+                rightPower = Range.clip(drive - turn, -1.5, 1.5);
+            }
+            else {
+                leftPower = Range.clip(drive + turn, -1.0, 1.0);
+                rightPower = Range.clip(drive - turn, -1.0, 1.0);
+            }
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
             //base touch sensor code, turns motor off if sensor is triggered
@@ -150,8 +156,22 @@ public class Basic_bot_DH extends LinearOpMode {
 //                arm.setPower(0.5);
 //            }
             if (limit.isPressed()) {
-                arm.setPower(0);
+                arm.setTargetPosition(10);
+                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                arm.setVelocity(1500);
             }
+//            if (limit.isPressed()) {
+//                rightDrive.setPower(0);
+//            }
+//            if(limit.isPressed()) {
+//                leftDrive.setPower(0);
+//            }
+//            if(limit.isPressed()) {
+//                claw1.setPosition(left_claw_shut);
+//            }
+//            if(limit.isPressed()) {
+//                claw2.setPosition(right_claw_shut);
+//            }
 
 
 
@@ -183,7 +203,7 @@ public class Basic_bot_DH extends LinearOpMode {
                 arm.setVelocity(1500);
             }
             if (gamepad1.dpad_down) {
-                arm.setTargetPosition(arm.getCurrentPosition() - 60);
+                arm.setTargetPosition(arm.getCurrentPosition() - 80);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
             }
@@ -206,15 +226,21 @@ public class Basic_bot_DH extends LinearOpMode {
                     claw1.setPosition(left_claw_open);
 
                 }
-                else {
-                    claw1.setPosition(left_claw_shut);
-                }
+//                else {
+//                    claw1.setPosition(left_claw_shut);
+//                }
+            else if (gamepad1.left_bumper ==true) {
+                claw1.setPosition(left_claw_shut);
+            }
                     if (gamepad1.right_bumper == true) {
                         claw2.setPosition(right_claw_open);
                     }
-                 else {
+                    else if (gamepad1.left_bumper ==true) {
                         claw2.setPosition(right_claw_shut);
                     }
+//                 else {
+//                        claw2.setPosition(right_claw_shut);
+//                    }
 
 
 
