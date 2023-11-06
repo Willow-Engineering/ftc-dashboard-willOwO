@@ -144,17 +144,6 @@ public class Basic_bot_DH extends LinearOpMode {
 //            } else {
 //                //Touch Sensor is pressed
 //                arm.setPower(0);
-
-//            if(gamepad1.dpad_up){
-//                arm.setTargetPosition(83);
-//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                arm.setPower(0.5);
-//            }
-//            else if (gamepad1.dpad_down){
-//                arm.setTargetPosition(0);
-//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                arm.setPower(0.5);
-//            }
             if (limit.isPressed()) {
                 arm.setTargetPosition(10);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -187,14 +176,15 @@ public class Basic_bot_DH extends LinearOpMode {
 //            }
 
             //Set position arm code
-//            if (gamepad1.b) {
-//                arm.setTargetPosition(0);
-//                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-//                arm.setVelocity(1500);
-//            }
+            if (gamepad1.b) {
+                arm.setTargetPosition(0);
+                arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+                arm.setVelocity(1500);
+            }
 //            if (gamepad1.a) {
 //                arm.setTargetPosition(1900);
-//                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                arm.setMode(DcMotor.RunMode.RUN_TO_POSI
+//                TION);
 //                arm.setVelocity(1500);
 //            }
             if (gamepad1.dpad_up) {
@@ -257,8 +247,10 @@ public class Basic_bot_DH extends LinearOpMode {
                 // Show the elapsed game time and wheel power.
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-                telemetry.addData("Encoder value", arm.getCurrentPosition());
+                telemetry.addData("Arm_Position", arm.getCurrentPosition());
                 telemetry.addData("Pressed", limit.isPressed());
+                telemetry.addData("claw1", claw1.getPosition());
+                telemetry.addData("claw2", claw2.getPosition());
                 telemetry.update();
             }
         }
