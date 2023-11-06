@@ -77,10 +77,10 @@ public class Basic_bot_DH extends LinearOpMode {
 
     //
 //    claw position variables.
-    public static int left_claw_open = 0;
-    public static int right_claw_open = 50;
-    public static int left_claw_shut = 50;
-    public static int right_claw_shut = 0;
+    public static double left_claw_open = 0.75;
+    public static double right_claw_open = 1;
+    public static double left_claw_shut = 1;
+    public static double right_claw_shut = 0.75;
 
 
 
