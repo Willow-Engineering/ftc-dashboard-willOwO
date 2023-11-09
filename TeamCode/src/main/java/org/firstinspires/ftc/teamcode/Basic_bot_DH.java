@@ -75,7 +75,6 @@ public class Basic_bot_DH extends LinearOpMode {
    private TouchSensor limit;
 
 
-    //
 //    claw position variables.
     public static double left_claw_open = 0.75;
     public static double right_claw_open = 1;
@@ -127,8 +126,8 @@ public class Basic_bot_DH extends LinearOpMode {
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             if(gamepad1.a == true) {
-                leftPower = Range.clip(drive + turn, -1.5, 1.5);
-                rightPower = Range.clip(drive - turn, -1.5, 1.5);
+                leftPower = Range.clip(drive + turn, -0.3, 0.3);
+                rightPower = Range.clip(drive - turn, -0.3, 0.3);
             }
             else {
                 leftPower = Range.clip(drive + turn, -1.0, 1.0);
@@ -209,7 +208,7 @@ public class Basic_bot_DH extends LinearOpMode {
 ////                    arm.setTargetPosition(1750);
 ////                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 ////                    arm.setVelocity(1500);
-////                }
+////                }1500
 
                 //grabber controls
                 if (gamepad1.right_bumper == true) {
