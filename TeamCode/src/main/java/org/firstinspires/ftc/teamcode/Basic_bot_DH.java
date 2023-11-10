@@ -125,7 +125,7 @@ public class Basic_bot_DH extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
-            if(gamepad1.a == true) {
+            if(gamepad1.a) {
                 leftPower = Range.clip(drive + turn, -0.3, 0.3);
                 rightPower = Range.clip(drive - turn, -0.3, 0.3);
             }
@@ -180,12 +180,11 @@ public class Basic_bot_DH extends LinearOpMode {
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
             }
-//            if (gamepad1.a) {
-//                arm.setTargetPosition(1900);
-//                arm.setMode(DcMotor.RunMode.RUN_TO_POSI
-//                TION);
-//                arm.setVelocity(1500);
-//            }
+            if (gamepad1.x) {
+                arm.setTargetPosition(1900);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setVelocity(1500);
+     }
             if (gamepad1.dpad_up) {
                 arm.setTargetPosition(arm.getCurrentPosition() + 80);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -196,28 +195,10 @@ public class Basic_bot_DH extends LinearOpMode {
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
             }
-//                // Start the motor moving by setting the max velocity to 200 ticks per second
-//                arm.setVelocity(2000);
-////                if (gamepad1.x) {
-////                    arm.setTargetPosition(650);
-////                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-////                    arm.setVelocity(1500);
-////                }
-//                arm.setVelocity(1500);
-////                if (gamepad1.a) {
-////                    arm.setTargetPosition(1750);
-////                    arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-////                    arm.setVelocity(1500);
-////                }1500
-
                 //grabber controls
                 if (gamepad1.right_bumper == true) {
                     claw1.setPosition(left_claw_open);
-
                 }
-//                else {
-//                    claw1.setPosition(left_claw_shut);
-//                }
             else if (gamepad1.left_bumper ==true) {
                 claw1.setPosition(left_claw_shut);
             }
@@ -227,22 +208,6 @@ public class Basic_bot_DH extends LinearOpMode {
                     else if (gamepad1.left_bumper ==true) {
                         claw2.setPosition(right_claw_shut);
                     }
-//                 else {
-//                        claw2.setPosition(right_claw_shut);
-//                    }
-
-
-
-//            telemetry.addData("Arm Test", arm.getCurrentPosition());
-//            telemetry.update();
-                // Tank Mode uses one stick to control each wheel. [DISABLED]
-                // - This requires no math, but it is hard to drive forward slowly and keep straight.
-                // leftPower  = -gamepad1.left_stick_y ;
-                // rightPower = -gamepad1.right_stick_y ;
-
-                // Send calculated power to wheels
-
-
                 // Show the elapsed game time and wheel power.
                 telemetry.addData("Status", "Run Time: " + runtime.toString());
                 telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
@@ -250,6 +215,14 @@ public class Basic_bot_DH extends LinearOpMode {
                 telemetry.addData("Pressed", limit.isPressed());
                 telemetry.addData("claw1", claw1.getPosition());
                 telemetry.addData("claw2", claw2.getPosition());
+            //A-B-X-Y buttons
+                telemetry.addData("A button", gamepad1.a);
+                telemetry.addData("B button", gamepad1.b);
+                telemetry.addData("X button", gamepad1.x);
+                telemetry.addData("Y button", gamepad1.y);
+            //trigger buttons
+                telemetry.addData("Right trigger", gamepad1.right_trigger);
+                telemetry.addData("Left trigger", gamepad1.left_trigger);
                 telemetry.update();
             }
         }
