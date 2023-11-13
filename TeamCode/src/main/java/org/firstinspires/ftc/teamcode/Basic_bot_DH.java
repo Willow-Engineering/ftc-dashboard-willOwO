@@ -176,7 +176,7 @@ public class Basic_bot_DH extends LinearOpMode {
 
             //Set position arm code
             if (gamepad1.b) {
-                arm.setTargetPosition(0);
+                arm.setTargetPosition(50);
                 arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
                 arm.setVelocity(1500);
             }
