@@ -125,7 +125,7 @@ public class Basic_bot_DH extends LinearOpMode {
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
-            if(gamepad1.a) {
+            if(gamepad1.right_trigger == 1) {
                 leftPower = Range.clip(drive + turn, -0.3, 0.3);
                 rightPower = Range.clip(drive - turn, -0.3, 0.3);
             }
