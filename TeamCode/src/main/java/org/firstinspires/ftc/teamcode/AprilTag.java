@@ -51,7 +51,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: AprilTag Easy", group = "Concept")
+@TeleOp(name = "AprilTagDH")
 //@Disabled
 public class AprilTag extends LinearOpMode {
     private DcMotor leftDrive = null;
@@ -113,6 +113,10 @@ public class AprilTag extends LinearOpMode {
                 telemetryAprilTag();
 
                 // Push telemetry to the Driver Station.
+                telemetry.addData("A button", gamepad1.a);
+                telemetry.addData("B button", gamepad1.b);
+                telemetry.addData("X button", gamepad1.x);
+                telemetry.addData("Y button", gamepad1.y);
                 telemetry.update();
 
                 // Save CPU resources; can resume streaming when needed.
