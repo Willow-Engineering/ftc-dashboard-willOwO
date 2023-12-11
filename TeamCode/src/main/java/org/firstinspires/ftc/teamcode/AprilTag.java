@@ -62,20 +62,25 @@ public class AprilTag extends LinearOpMode {
     final double MAX_AUTO_SPEED = 0.5;
     final double MAX_AUTO_TURN = 0.25;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final int DESIRED_TAG_ID = 0;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    private VisionPortal visionPortal;               // Used to manage the video source.
+    private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
+    private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     /**
      * {@link #aprilTag} is the variable to store our instance of the AprilTag processor.
      */
-    private AprilTagProcessor aprilTag;
 
     /**
      * {@link #visionPortal} is the variable to store our instance of the vision portal.
      */
-    private VisionPortal visionPortal;
+
 
     @Override
     public void runOpMode() {
-
+        boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+        double  drive           = 0;        // Desired forward power/speed (-1 to +1) +ve is forward
+        double  turn            = 0;        // Desired turning power/speed (-1 to +1) +ve is CounterClockwise
         initAprilTag();
         FtcDashboard dashboard = FtcDashboard.getInstance();
         // Wait for the DS start button to be touched.
@@ -89,26 +94,50 @@ public class AprilTag extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                double leftPower;
-                double rightPower;
+                targetFound = false;
+                desiredTag  = null;
 
-                // Choose to drive using either Tank Mode, or POV Mode
-                // Comment out the method that's not used.  The default below is POV.
+                // Step through the list of detected tags and look for a matching tag
+                List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+                for (AprilTagDetection detection : currentDetections) {
+                    if ((detection.metadata != null)
+                            && ((DESIRED_TAG_ID >= 0) || (detection.id == DESIRED_TAG_ID))  ){
+                        targetFound = true;
+                        desiredTag = detection;
+                        break;  // don't look any further.
+                    }
+                }
 
-                // POV Mode uses left stick to go forward, and right stick to turn.
-                // - This uses basic math to combine motions and is easier to drive straight.
-                double drive = -gamepad1.left_stick_y;
-                double turn = gamepad1.right_stick_x;
-                if(gamepad1.right_trigger == 1) {
-                    leftPower = Range.clip(drive + turn, -0.3, 0.3);
-                    rightPower = Range.clip(drive - turn, -0.3, 0.3);
+                // Tell the driver what we see, and what to do.
+                if (targetFound) {
+                    telemetry.addData(">","HOLD Left-Bumper to Drive to Target\n");
+                    telemetry.addData("Target", "ID %d (%s)", desiredTag.id, desiredTag.metadata.name);
+                    telemetry.addData("Range",  "%5.1f inches", desiredTag.ftcPose.range);
+                    telemetry.addData("Bearing","%3.0f degrees", desiredTag.ftcPose.bearing);
+                } else {
+                    telemetry.addData(">","Drive using joystick to find target\n");
                 }
-                else {
-                    leftPower = Range.clip(drive + turn, -1.0, 1.0);
-                    rightPower = Range.clip(drive - turn, -1.0, 1.0);
+
+                // If Left Bumper is being pressed, AND we have found the desired target, Drive to target Automatically .
+                if (gamepad1.left_bumper && targetFound) {
+
+                    // Determine heading and range error so we can use them to control the robot automatically.
+                    double  rangeError   = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+                    double  headingError = desiredTag.ftcPose.bearing;
+
+                    // Use the speed and turn "gains" to calculate how we want the robot to move.  Clip it to the maximum
+                    drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+                    turn  = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN) ;
+
+                    telemetry.addData("Auto","Drive %5.2f, Turn %5.2f", drive, turn);
+                } else {
+
+                    // drive using manual POV Joystick mode.
+                    drive = -gamepad1.left_stick_y  / 1;  // Reduce drive rate to 50%.
+                    turn  = -gamepad1.right_stick_x / 1;  // Reduce turn rate to 25%.
+                    telemetry.addData("Manual","Drive %5.2f, Turn %5.2f", drive, turn);
                 }
-                leftDrive.setPower(leftPower);
-                rightDrive.setPower(rightPower);
+                telemetry.update();
 
                 telemetryAprilTag();
 
@@ -182,5 +211,20 @@ public class AprilTag extends LinearOpMode {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
     }   // end method telemetryAprilTag()
+    public void moveRobot(double x, double yaw) {
+        // Calculate left and right wheel powers.
+        double leftPower    = x - yaw;
+        double rightPower   = x + yaw;
 
+        // Normalize wheel powers to be less than 1.0
+        double max = Math.max(Math.abs(leftPower), Math.abs(rightPower));
+        if (max >1.0) {
+            leftPower /= max;
+            rightPower /= max;
+        }
+
+        // Send powers to the wheels.
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+    }
 }   // end class
